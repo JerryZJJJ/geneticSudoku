@@ -12,18 +12,19 @@ class sudsol:
         ## everything is permanent until we load...
 
     def poke(self, x, y, v):
+        ''' Insert v into matrix at [x][y] if inside bounds. '''
         if(x<9) & (y<9):
             self.block[x][y] = v 
 
     def grade(self):
+        ''' Calculate a score for the current matrix.  Consists of three 
+            sums: unique items in each row, col, and zone.  Should be 9
+            items in each of the 9 rows, 9 cols, and 9 zone, so 3*9*9=
+            243 total. '''
         rowGrade = sum([len(set(i)) for i in self.block])
-        #print rowGrade
         colGrade = 0
         for col in range(0, 9):
-            #print "-",colGrade
             colGrade+=len(set([self.block[i][col] for i in range(0, 9)]))
-            #print [self.block[i][col] for i in range(0, 9)]
-        #print colGrade
         zoneGrade = 0
         for x in range(0, 9, 3):
             for y in range(0, 9, 3):
@@ -31,17 +32,19 @@ class sudsol:
                 for x1 in range(0, 3):
                     for y1 in range(0, 3):
                         setSum.add(self.block[x+x1][y+y1])
-                        #print "-",self.block[x+x1][y+y1]
                 zoneGrade+=len(setSum)
                 setSum = None
-        #print zoneGrade
         return(colGrade+rowGrade+zoneGrade)
 
     def randomize(self):
+        ''' Very inefficiently, create a random solution.  
+            TODO: Move 1000 out to an argument. '''
         for i in range(0, 1000):
             self.poke(r.randint(0, 9), r.randint(0, 9), r.randint(1,9)) 
 
     def load(self, inStr):
+        ''' From a string, load a matrix.  Strings should be 9 lines and
+            delimited by spaces with -1 for unknowns.  Max 9 items per line.'''
         count = 0
         for k in inStr.split("\n"):
            # print k
