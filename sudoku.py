@@ -167,6 +167,7 @@ if(__name__=="__main__"):
             solSet[i][0] = solSet[i][1].grade()
         #print ""
         runs+=1
+        ## if we assess it to be solved
         if(high==243):
             break
 
